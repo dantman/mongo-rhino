@@ -261,7 +261,8 @@
 			return Mongo.mongoToJS(doc);
 		},
 		find: function find(q, fields) {
-			q = Mongo.jsToMongo(q);
+			if ( q )
+				q = Mongo.jsToMongo(q);
 			if ( fields )
 				fields = Mongo.jsToMongo(fields);
 			var jCursor = fields ? this._jDBCollection.find(q, fields) :
