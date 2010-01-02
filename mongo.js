@@ -23,10 +23,14 @@
 {
 	let m = com.mongodb;
 	
+	let _oids = new java.util.WeakHashMap(); // Use a gcable map to make sure only one instance for an ObjectId exists
 	function ObjectId(s) {
+		if ( s && _oids.containsKey(""+s) )
+			return _oids.get(""+s);
 		if (!(this instanceof ObjectId))
 			return new ObjectId(s);
 		this._jObjectId = s ? new m.ObjectId(s) : new m.ObjectId();
+		_oids.put(""+this._jObjectId, this);
 	}
 	ObjectId.prototype.equals = function(objectid) {
 		var j = objectid instanceof m.ObjectId ? objectid :
