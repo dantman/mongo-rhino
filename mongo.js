@@ -284,6 +284,7 @@
 			obj = Mongo.jsToMongo(obj);
 			if ( typeof options === "boolean" )
 				options = { upsert: options };
+			options = options || {};
 			this._jDBCollection.update(q, obj, !!options.upsert, options.ids !== false);
 		},
 		save: function save(obj) {
