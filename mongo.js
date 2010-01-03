@@ -59,8 +59,10 @@
 			new m.Mongo();
 	}
 	Mongo.mongoToJS = function mongoToJS(dbobject) {
-		if ( dbobject instanceof m.DBUndefined )
-			return undefined;
+		//if ( dbobject instanceof m.DBUndefined )
+		//	return undefined;
+		if ( dbobject instanceof m.ObjectId )
+			return new ObjectId(String(dbobject.toString()));
 		if ( dbobject instanceof m.BasicDBList ) {
 			var arr = [];
 			var iterator = dbobject.iterator();
@@ -89,8 +91,6 @@
 			return Number(dbobject);
 		if ( dbobject instanceof java.lang.String )
 			return String(dbobject);
-		if ( dbobject instanceof m.ObjectId )
-			return new ObjectId(String(dbobject.toString()));
 		// @todo DBRefs
 		return dbobject;
 	};
@@ -99,7 +99,7 @@
 			// Don't touch stuff that's already in java land
 			return jsobject;
 		if ( jsobject === undefined )
-			return new m.DBUndefined();
+			return undefined;// return new m.DBUndefined();
 		if ( isArray(jsobject) ) {
 			var dblist = new m.BasicDBList();
 			for ( var i = 0; i < jsobject.length; i++ ) {
@@ -125,7 +125,8 @@
 			var dbobject = new m.BasicDBObject();
 			Object.keys(jsobject).forEach(function(key) {
 				// I was thinking of using Object.getOwnPropertyNames, but I suppose we'll ignore non-enumerable keys
-				dbobject.put(key, jsToMongo(jsobject[key]));
+				if ( jsobject[key] !== undefined )
+					dbobject.put(key, jsToMongo(jsobject[key]));
 			});
 			return dbobject;
 		}
