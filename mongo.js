@@ -364,6 +364,9 @@
 			}, thisp);
 			return arr;
 		},
+		toArray: function() {
+			return this.map(function(doc) { return doc; });
+		},
 		limit: function limit(max) {
 			return new DBCursor(this.jDBCursor.limit(max));
 		},
