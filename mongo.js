@@ -86,7 +86,7 @@
 		if ( dbobject instanceof java.util.Date )
 			return new Date(Number(dbobject.getTime()));
 		if ( dbobject instanceof java.lang.Boolean )
-			return !!dbobject;
+			return !!dbobject.booleanValue();
 		if ( dbobject instanceof java.lang.Number )
 			return Number(dbobject);
 		if ( dbobject instanceof java.lang.String )
