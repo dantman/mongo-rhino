@@ -177,7 +177,12 @@
 			return new DBCollection(this, cname);
 		},
 		runCommand: function runCommand(cmdObj) {
-			// run a database command.  if cmdObj is a string, turns it into { cmdObj : 1 }
+			if ( isString(cmdObj) ) {
+				var obj = {};
+				obj[cmdObj] = 1;
+				cmdObj = obj;
+			}
+			return Mongo.mongoToJS( this._jDB.command( Mongo.jsToMongo( cmdObj ) ) );
 		},
 		addUser: function addUser(username, password) {
 			// 
@@ -275,8 +280,15 @@
 				this._jDBCollection.find();
 			return new DBCursor(jCursor);
 		},
-		count: function count() {
-			
+		count: function count(q, fields) {
+			if ( q )
+				q = Mongo.jsToMongo(q);
+			if ( fields )
+				fields = Mongo.jsToMongo(fields);
+			var count = fields ? this._jDBCollection.getCount(q, fields) :
+				q ? this._jDBCollection.getCount(q) :
+				this._jDBCollection.getCount();
+			return Number(count);
 		},
 		insert: function insert(obj) {
 			obj = Mongo.jsToMongo(obj);
@@ -329,6 +341,18 @@
 		},
 		totalIndexSize: function totalIndexSize() {
 			
+		},
+		findAndModify: function findAndModify(options) {
+			var o = { findandmodify: this.getName() };
+			Object.merge(o, options);
+			return this._db.runCommand(o).value;
+		},
+		mapReduce: function mapReduce(map, reduce, options) {
+			var o = { mapreduce: this.getName() };
+			options.map = map;
+			options.reduce = reduce;
+			Object.merge(o, options);
+			return this._db.runCommand(o);
 		}
 	});
 	
