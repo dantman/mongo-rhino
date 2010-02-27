@@ -191,7 +191,8 @@
 			// 
 		},
 		createCollection: function createCollection(name, options) {
-			// 
+			options = Mongo.jsToMongo(options);
+			return new DBCollection(this, this._jDB.createCollection(name, options));
 		},
 		getReplicationInfo: function getReplicationInfo() {
 			// 
@@ -251,7 +252,7 @@
 	
 	function DBCollection(db, cname) {
 		this._db = db;
-		this._jDBCollection = this._db._jDB.getCollection(cname);
+		this._jDBCollection = cname instanceof m.DBCollection ? cname : this._db._jDB.getCollection(cname);
 	}
 	Object.merge(DBCollection.prototype, {
 		getDB: function getDB() {
