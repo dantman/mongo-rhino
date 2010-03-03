@@ -293,8 +293,8 @@
 		},
 		insert: function insert(obj) {
 			obj = Mongo.jsToMongo(obj);
-			var dbobj = this._jDBCollection.insert(obj);
-			return Mongo.mongoToJS(dbobj.get("_id"));
+			this._jDBCollection.insert(obj);
+			return Mongo.mongoToJS(obj.get("_id"));
 		},
 		update: function update(q, obj, options) {
 			var hasId = "_id" in obj;
@@ -307,8 +307,8 @@
 		},
 		save: function save(obj) {
 			obj = Mongo.jsToMongo(obj);
-			var dbobj = this._jDBCollection.save(obj);
-			return Mongo.mongoToJS(dbobj.get("_id"));
+			this._jDBCollection.save(obj);
+			return Mongo.mongoToJS(obj.get("_id"));
 		},
 		remove: function(q) {
 			q = Mongo.jsToMongo(q);
