@@ -41,11 +41,13 @@
 		
 		return !!this._jObjectId.equals(j);
 	}
-	ObjectId.prototype.toJSON =
-	ObjectId.prototype.toString = function() {
+	ObjectId.prototype.toJSON = function toJSON() {
+		return this.toString();
+	};
+	ObjectId.prototype.toString = function toString() {
 		return String(this._jObjectId.toString());
 	};
-	ObjectId.prototype.toSource = function() {
+	ObjectId.prototype.toSource = function toSource() {
 		return '(new ObjectId('+uneval(this.toString())+'))';
 	};
 
