@@ -23,6 +23,9 @@
 {
 	let m = com.mongodb;
 	
+	// WARNING: Using a WeakHashMap seams to result in a situation where once in awhile
+	// two equal object ids will not be considered equal causing unexpected bugs
+	// we should drop that and instead add something like ObjectId.equals and objid.indexIn
 	let _oids = new java.util.WeakHashMap(); // Use a gcable map to make sure only one instance for an ObjectId exists
 	function ObjectId(s) {
 		if ( s && _oids.containsKey(""+s) )
