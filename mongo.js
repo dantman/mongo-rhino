@@ -310,10 +310,10 @@
 			options = options || {};
 			this._jDBCollection.update(q, obj, !!options.upsert, options.ids !== false);*/
 			if ( isObject(upsert) ) {
-				multi = !!upsert.multi;
-				upsert = !!upsert.upsert;
+				multi = upsert.multi;
+				upsert = upsert.upsert;
 			}
-			this._jDBCollection.update(q, obj, upsert, multi);
+			this._jDBCollection.update(q, obj, !!upsert, !!multi);
 		},
 		save: function save(obj) {
 			obj = Mongo.jsToMongo(obj);
