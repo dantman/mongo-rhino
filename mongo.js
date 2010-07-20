@@ -296,14 +296,19 @@
 			this._jDBCollection.insert(obj);
 			return Mongo.mongoToJS(obj.get("_id"));
 		},
-		update: function update(q, obj, options) {
+		update: function update(q, obj, /*options*/upsert, multi) {
 			var hasId = "_id" in obj;
 			q = Mongo.jsToMongo(q);
 			obj = Mongo.jsToMongo(obj);
-			if ( typeof options === "boolean" )
+			/*if ( typeof options === "boolean" )
 				options = { upsert: options };
 			options = options || {};
-			this._jDBCollection.update(q, obj, !!options.upsert, options.ids !== false);
+			this._jDBCollection.update(q, obj, !!options.upsert, options.ids !== false);*/
+			if ( isObject(upsert) ) {
+				multi = !!upsert.multi;
+				upsert = !!upsert.upsert;
+			}
+			this._jDBCollection.update(q, obj, upsert, multi);
 		},
 		save: function save(obj) {
 			obj = Mongo.jsToMongo(obj);
