@@ -1,6 +1,7 @@
 /**
  * @author Daniel Friesen
- * Copyright © 2009 Redwerks Systems Inc.
+ * @copyright Copyright © 2009 Redwerks Systems Inc.
+ * @license MIT
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
