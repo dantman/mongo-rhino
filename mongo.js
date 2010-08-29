@@ -21,7 +21,7 @@
  * THE SOFTWARE.
  */
 {
-	let m = com.mongodb;
+	let m = com.mongodb, bson = org.bson.types;
 	
 	// WARNING: Using a WeakHashMap seams to result in a situation where once in awhile
 	// two equal object ids will not be considered equal causing unexpected bugs
@@ -32,13 +32,13 @@
 			return _oids.get(""+s);
 		if (!(this instanceof ObjectId))
 			return new ObjectId(s);
-		this._jObjectId = s ? new m.ObjectId(s) : new m.ObjectId();
+		this._jObjectId = s ? new bson.ObjectId(s) : new bson.ObjectId();
 		_oids.put(""+this._jObjectId, this);
 	}
 	ObjectId.prototype.equals = function(objectid) {
-		var j = objectid instanceof m.ObjectId ? objectid :
+		var j = objectid instanceof bson.ObjectId ? objectid :
 		        objectid instanceof ObjectId ? objectid._jObjectId :
-		        isString(objectid) ? new m.ObjectId(objectid) : false;
+		        isString(objectid) ? new bson.ObjectId(objectid) : false;
 		if ( !j )
 			return false;
 		
@@ -66,7 +66,7 @@
 	Mongo.mongoToJS = function mongoToJS(dbobject) {
 		//if ( dbobject instanceof m.DBUndefined )
 		//	return undefined;
-		if ( dbobject instanceof m.ObjectId )
+		if ( dbobject instanceof bson.ObjectId )
 			return new ObjectId(String(dbobject.toString()));
 		if ( dbobject instanceof m.BasicDBList ) {
 			var arr = [];
@@ -111,6 +111,10 @@
 				dblist.put(String(i), jsToMongo(jsobject[i]));
 			}
 			return dblist;
+		}
+		if ( isFunction(jsobject) ) {
+			// @todo CodeWScope? use bind?
+			return new bson.Code(jsobject.toString());
 		}
 		if ( jsobject instanceof RegExp ) {
 			var flags = [];
