@@ -24,6 +24,10 @@
 {
 	let m = com.mongodb, bson = org.bson.types;
 	
+	Object.bsonsize = function bsonsize(obj) {
+		return org.bson.BSON.encode(Mongo.jsToMongo(obj)).length;
+	};
+	
 	// WARNING: Using a WeakHashMap seams to result in a situation where once in awhile
 	// two equal object ids will not be considered equal causing unexpected bugs
 	// we should drop that and instead add something like ObjectId.equals and objid.indexIn
