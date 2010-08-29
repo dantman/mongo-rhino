@@ -281,15 +281,15 @@
 				this._jDBCollection.findOne();
 			return Mongo.mongoToJS(doc);
 		},
-		find: function find(q, fields) {
-			if ( q )
-				q = Mongo.jsToMongo(q);
-			if ( fields )
-				fields = Mongo.jsToMongo(fields);
-			var jCursor = fields ? this._jDBCollection.find(q, fields) :
-				q ? this._jDBCollection.find(q) :
-				this._jDBCollection.find();
-			return new DBCursor(jCursor);
+		find: function find(q, fields, options) {
+			q = Mongo.jsToMongo(q||{});
+			fields = fields && Mongo.jsToMongo(fields) || null;
+			options = options || {};
+			slaveOk = options.slaveOk || false;
+			skip = options.skip || 0;
+			batchSize = options.batchSize || 0;
+			optionsBits = slaveOk ? 0 : m.Bytes.QUERYOPTION_SLAVEOK;
+			return new DBCursor(this._jDBCollection.find(q, fields, skip, batchSize, optionsBits));
 		},
 		count: function count(q, fields) {
 			if ( q )
@@ -417,10 +417,16 @@
 			orderBy = Mongo.jsToMongo(orderBy);
 			return new DBCursor(this.jDBCursor.sort(orderBy));
 		},
+		batchSize: function batchSize(size) {
+			return new DBCursor(this.jDBCursor.batchSize(size));
+		},
 		hint: function hint(index) {
 			if ( !isString(index) )
 				index = Mongo.jsToMongo(index);
 			return new DBCursor(this.jDBCursor.hint(index));
+		},
+		setSlaveOk: function setSlaveOk() {
+			return new DBCursor(this.jDBCursor.addOption(m.Bytes.QUERYOPTION_SLAVEOK));
 		}
 	});
 	
