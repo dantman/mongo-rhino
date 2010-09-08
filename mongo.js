@@ -81,14 +81,14 @@
 		//	return undefined;
 		if ( dbobject instanceof bson.ObjectId )
 			return new ObjectId(String(dbobject.toString()));
-		if ( dbobject instanceof m.BasicDBList ) {
+		if ( dbobject instanceof bson.BasicBSONList ) {
 			var arr = [];
 			var iterator = dbobject.iterator();
 			while(iterator.hasNext())
 				arr.push(mongoToJS(iterator.next()));
 			return arr;
 		}
-		if ( dbobject instanceof m.BasicDBObject ) {
+		if ( dbobject instanceof org.bson.BSONObject ) {
 			var obj = {};
 			var keySet = dbobject.keySet();
 			var iterator = keySet.iterator();
