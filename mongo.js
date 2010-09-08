@@ -33,6 +33,8 @@
 	// we should drop that and instead add something like ObjectId.equals and objid.indexIn
 	let _oids = new java.util.WeakHashMap(); // Use a gcable map to make sure only one instance for an ObjectId exists
 	function ObjectId(s) {
+		if ( s instanceof ObjectId )
+			return s;
 		if ( s && _oids.containsKey(""+s) )
 			return _oids.get(""+s);
 		if (!(this instanceof ObjectId))
@@ -48,7 +50,13 @@
 			return false;
 		
 		return !!this._jObjectId.equals(j);
-	}
+	};
+	ObjectId.prototype.inArray = function inArray(array) {
+		var oid = this;
+		return array.some(function(item) {
+			return oid.equals(item);
+		});
+	};
 	ObjectId.prototype.toJSON = function toJSON() {
 		return this.toString();
 	};
