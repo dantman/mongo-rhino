@@ -100,7 +100,7 @@
 		}
 		var Pattern = java.util.regex.Pattern;
 		if ( dbobject instanceof Pattern )
-			return new RegExp(String(dbobject.pattern()), String(m.Bytes.patternFlags(dbobject.flags())));
+			return new RegExp(String(dbobject.pattern()), String(m.Bytes.regexFlags(dbobject.flags())));
 		if ( dbobject instanceof java.util.Date )
 			return new Date(Number(dbobject.getTime()));
 		if ( dbobject instanceof java.lang.Boolean )
@@ -137,7 +137,7 @@
 				flags.push('i');
 			if ( jsobject.multiline )
 				flags.push('m');
-			return java.util.regex.Pattern.compile(jsobject.source, m.Bytes.patternFlags(flags.join('')));
+			return java.util.regex.Pattern.compile(jsobject.source, m.Bytes.regexFlags(flags.join('')));
 		}
 		if ( jsobject instanceof Date )
 			return new java.util.Date(jsobject.getTime());
