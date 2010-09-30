@@ -338,7 +338,7 @@
 			return Mongo.mongoToJS(obj.get("_id"));
 		},
 		remove: function(q) {
-			q = Mongo.jsToMongo(q);
+			q = Mongo.jsToMongo(q || {});
 			this._jDBCollection.remove(q);
 		},
 		ensureIndex: function ensureIndex(keys, options) {
