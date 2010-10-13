@@ -249,7 +249,7 @@
 			
 			return Mongo.mongoToJS( this._jDB.eval.apply( this._jDB, args ) );
 		},
-		getLastError: function getLastError() {
+		getLastError: function getLastError() { if ( arguments.length ) throw new TypeError("Arguments to getLastError not implemented yet.");
 			return Mongo.mongoToJS( this._jDB.getLastError() );
 		},
 		getPrevError: function getPrevError() {
@@ -387,6 +387,11 @@
 	function DBCursor(jDBCursor) {
 		this.jDBCursor = jDBCursor;
 	};
+	Object.defineProperty(DBCursor.prototype, "hasNext", {
+		get: function hasNext() {
+			return !!this.jDBCursor.hasNext();
+		}
+	});
 	Object.merge(DBCursor.prototype, {
 		copy: function copy() {
 			return new DBCursor(this.jDBCursor.copy());
@@ -408,6 +413,9 @@
 				callback.call(thisp||(function(){return this;})(), doc);
 			}
 			
+		},
+		next: function next() {
+			return Mongo.mongoToJS(this.jDBCursor.next());
 		},
 		map: function map(callback, thisp) {
 			var arr = [];
