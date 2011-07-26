@@ -25,7 +25,7 @@
 	let m = com.mongodb, bson = org.bson.types;
 	
 	Object.bsonsize = function bsonsize(obj) {
-		return org.bson.BSON.encode(Mongo.jsToMongo(obj)).length;
+		return BSON.encode(obj).length;
 	};
 	
 	// WARNING: Using a WeakHashMap seams to result in a situation where once in awhile
@@ -65,6 +65,9 @@
 	};
 	ObjectId.prototype.toSource = function toSource() {
 		return '(new ObjectId('+uneval(this.toString())+'))';
+	};
+	ObjectId.prototype.toByteArray = function toByteArray() {
+		return this._jObjectId.toByteArray();
 	};
 
 	function Mongo(a, b) {
@@ -169,6 +172,16 @@
 			return names;
 		}
 	});
+	
+	var BSON = {
+		encode: function(obj) {
+			return org.bson.BSON.encode(Mongo.jsToMongo(obj));
+		},
+		decode: function(bin) {
+			return Mongo.mongoToJS(org.bson.BSON.decode(bin));
+		}
+	};
+	Mongo.BSON = BSON;
 	
 	function DB(mongo, name) {
 		this._mongo = mongo;
